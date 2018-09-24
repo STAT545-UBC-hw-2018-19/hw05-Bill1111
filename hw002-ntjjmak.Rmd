@@ -1,0 +1,30 @@
+---
+title: "hw02-ntjjmak"
+author: "Nicole Mak"
+date: "24/09/2018"
+output:
+  github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r cars}
+library(gapminder)
+```
+
+
+```{r}
+typeof(gapminder)
+class(gapminder)
+gapminder
+```
+```{r}
+str(gapminder)
+ncol(gapminder)
+nrow(gapminder)
+```
+
+
