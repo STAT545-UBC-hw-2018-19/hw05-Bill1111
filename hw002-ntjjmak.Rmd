@@ -10,16 +10,16 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-Let's load the data.
+## Let's load the data.
 
-```{r cars}
+```{r loading}
 library(gapminder)
 library(tidyverse)
 ```
 
-What kind of data is this? Print it out.
+**What kind of data is this? Print it out.**
 
-```{r}
+```{r characterising the data}
 typeof(gapminder)
 class(gapminder)
 gapminder
@@ -27,18 +27,16 @@ gapminder
 
 
 
-```{r}
+```{r basic exploration}
 str(gapminder)
 ncol(gapminder)
 nrow(gapminder)
 ```
 
 
-Let's examine life expectancy and gdp Per capita. What are the values, ranges, distribution to be expected by continent?
+**Let's examine life expectancy and gdp Per capita. What are the values, ranges, distribution to be expected by continent? Here are some summary tables:**
 
-Here are some summary tables:
-
-```{r}
+```{r individual variable exploration}
 gapminder %>% 
   select(continent)%>% 
   summary()
@@ -47,30 +45,28 @@ gapminder %>%
   summary()
 ```
 
-Values, ranges, distribution can also be explored visually using graphs.
+**Values, ranges, distribution can also be explored visually using graphs. Let's also use a figure to examine the distribution and frequency of values for the variable "Life Expectancy".**
 
-Let's also use a figure to examine the distribution and frequency of values for the variable "Life Expectancy".
-
-```{r}
+```{r basic univariable histogram}
 gapminder %>% 
   ggplot(aes(lifeExp)) +
   geom_histogram(binwidth = 1)
 ```
 
-Let's try a density plot.
+**Let's try a density plot.**
 
-```{r}
+```{r basic univariable density plot}
 gapminder %>% 
   ggplot(aes(lifeExp)) +
   geom_density(kernel = "gaussian")
   
 ```
 
-Let's do a further exploration of life Expectancy and gdpPercap by continent.
+**Let's do a further exploration of life Expectancy and gdpPercap by continent.**
 
 First, we can explore by boxplot.
 
-```{r}
+```{r experiment with 2 variables}
 gapminder %>% 
   ggplot(aes(continent, lifeExp)) + 
   geom_boxplot()
@@ -80,27 +76,26 @@ gapminder %>%
   geom_boxplot()
 ```
 
-The boxplot exploring gdpPercap by continent is a bit difficult to interpret. Let us transform it to a log scale.
+**The boxplot exploring gdpPercap by continent is a bit difficult to interpret. Let us transform it to a log scale.**
 
-```{r}
+```{r log transformation trial}
 gapminder %>% 
   ggplot(aes(continent, log(gdpPercap))) + 
   geom_boxplot()
 ```
 
 
-To get an idea of which values are typical, we can alternatively use a scatter plot so that all data points are seen. Transparency is added to give an idea of which values are most frequent in the data set.
+**To get an idea of which values are typical, we can alternatively use a scatter plot so that all data points are seen. Transparency is added to give an idea of which values are most frequent in the data set.**
 
-```{r}
+```{r experimenting with transparency}
 gapminder %>% 
   ggplot(aes(continent, log(gdpPercap))) + 
   geom_point(alpha = 0.05)
 ```
 
-Here is some practice filtering to single countries, Canada and China. 
-Let's see whether these countries see a rise in life expectancy over the years. 
+**Here is some practice filtering to single countries, Canada and China.Let's see whether these countries see a rise in life expectancy over the years.** 
 
-```{r}
+```{r applying filtering and piping trial 1}
 gapminder %>% 
   filter(country == "Canada") %>% 
   ggplot(aes(year, lifeExp)) +
@@ -112,9 +107,9 @@ gapminder %>%
   geom_point()
 ```
 
-Here is some more practice piping.
+**Here is some more practice piping.**
 
-```{r}
+```{r building more piping and incorporating log transformation}
 gapminder %>% 
   filter(continent == "Oceania") %>% 
   filter(year > "1990") %>% 
@@ -123,7 +118,7 @@ gapminder %>%
 
 ```
 
-```{r}
+```{r again experimenting with piping}
 gapminder %>% 
   select(continent, lifeExp, gdpPercap) %>% 
   filter(lifeExp >= "75") %>% 
@@ -132,18 +127,18 @@ gapminder %>%
 ```
 
 
-Let's play with colour.
+**Let's play with colour.**
 
-```{r}
+```{r more visualisation but with colour}
 gapminder %>% 
   filter(year > "1970") %>%
   ggplot(aes(continent, mean(pop), fill = continent)) +
   geom_col()
 ```
 
-Let's try flipping it around.
+**Let's try flipping it around.**
 
-```{r}
+```{r flipping x and y}
 gapminder %>% 
   filter(year > "1970") %>%
   ggplot(aes(continent, mean(pop), fill = continent)) +
@@ -152,13 +147,13 @@ gapminder %>%
 ```
 
 
-Lastly, let's experiment a couple more `dplyr` functions.
+**Lastly, let's experiment a couple more `dplyr` functions.**
 
-```{r}
+```{r just more dplyr trials}
 select(gapminder, -continent, - gdpPercap) %>% 
   filter(year == "2007") %>%
   arrange(lifeExp)
 ```
 
 
-All done.
+## All done.
