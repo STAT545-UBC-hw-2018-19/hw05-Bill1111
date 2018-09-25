@@ -7,7 +7,9 @@ This particular exercise is exploring `dplyr` and `ggplot2`.
 
 
 ## Here are the links to the homework!
+
 https://github.com/STAT545-UBC-students/hw02-ntjjmak/blob/master/hw002-ntjjmak.Rmd
+
 https://github.com/STAT545-UBC-students/hw02-ntjjmak/blob/master/hw002-ntjjmak.md
 
 
