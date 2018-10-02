@@ -107,9 +107,6 @@ In order to determine how life expectancy is changing over time in different con
 
 What we have done in the code below is calculate the change in life expectancy year over year for each country within each continent. Then we have summarized the mean change in life expectancy for each country in the continent. Then we have multiplied that by 365 to get the average change in life expectancy in days year over year for each continent.
 
-The Rachel way of doing this is to just calcualte the mean, then graph it over time. Use geom point and geom line then for graphing
------------------------------------------------------------------------------------------------------------------------------------
-
 ``` r
 contLifeChange <- gapminder %>% 
                       group_by(continent) %>% 
@@ -141,26 +138,6 @@ ggplot(contLifeChange, aes(contLifeChange$continent, fill = contLifeChange$conti
 ```
 
 ![](STAT545_hmk3_WilliamHall_files/figure-markdown_github/unnamed-chunk-8-1.png)
-
-We could also just plot the mean life expectancy in every year for every continent over time. First we will have to calculate the mean life expectancy for every continent in every year, then we can plot it using geom line and geom point.
-
-can't quite figure this out yet
--------------------------------
-
-``` r
-gapminder %>% 
-  group_by(continent) %>% 
-  summarize(meanLife = mean(lifeExp))
-```
-
-    ## # A tibble: 5 x 2
-    ##   continent meanLife
-    ##   <fct>        <dbl>
-    ## 1 Africa        48.9
-    ## 2 Americas      64.7
-    ## 3 Asia          60.1
-    ## 4 Europe        71.9
-    ## 5 Oceania       74.3
 
 `5. Report the absolute and/or relative abundance of countries with low life expectancy over time by continent: Compute some measure of worldwide life expectancy – you decide – a mean or median or some other quantile or perhaps your current age. Then determine how many countries on each continent have a life expectancy less than this benchmark, for each year.`
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -222,3 +199,10 @@ hlgap2
     ## 7 Europe    high                 351       0.975
     ## 8 Europe    low                    9       0.025
     ## 9 Oceania   high                  24       1
+
+Reflection
+----------
+
+This assignment was by far the most challenging I have done so far. I find it very difficult to use the group\_by() function. Something that the TA taught me is that sometimes you can't pipe everything, and you need to create a new data frame to be able to achieve what you are trying to do.
+
+I think that some more complex examples in class would be very helpful.
