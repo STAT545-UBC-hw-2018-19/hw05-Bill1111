@@ -1,4 +1,4 @@
-# Welcome to William Hall's STAT545 Homework #3 repository
+# Welcome to William Hall's STAT545 Homework #4 repository
 
 In this assignment, I dug more into the use of the Kable function to make my tables more pretty, and the joining functions to combine datasets. 
 
