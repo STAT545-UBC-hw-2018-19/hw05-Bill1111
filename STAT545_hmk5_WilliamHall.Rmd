@@ -1,0 +1,210 @@
+---
+title: "STAT545_hmk5_WilliamHall"
+author: "William Hall"
+date: '2018-10-19'
+output: html_document
+---
+
+```{r}
+library(dplyr)
+library(gapminder)
+library(tidyverse)
+library(plotly)
+```
+
+
+##Part 1: Factor Management
+
+>A) Elaboration of the gapminder dataset - Drop Oceania
+
+
+Filter the Gapminder data to remove observations associated with the continent of Oceania. To start with I will examine the gapminder dataset to explore the Oceania varible. 
+
+"Oceania" is one of the levels within the "Continent" variable, and that the continent variable is a factor with 5 levels. Remember that we can think of a factor as a vector that
+
+- has character entries on the surface
+- are integers underneath
+- has __levels__
+
+```{r}
+levels(gapminder$continent) # gives us all the levels of the continent factor variable
+class(gapminder$continent)  # tells us the type of variable that continent is
+  
+```
+
+Now we can filter out the "Oceania" variable. If we compare the original 'gapminder' dataset and the 'gapNoOceania' dataset, then we can see that our code has worked and the 24 Oceania data points have been removed.
+
+```{r}
+gapNoOceania <- gapminder %>% 
+  filter(!(continent == "Oceania")) # the ! filters out everything in the brackets
+
+summary(gapminder$continent) # shows us that initially Oceania has 24 observations
+summary(gapNoOceania$continent) # shows us that our code worked and those 24 obvs in Oceania have been removed.
+
+```
+
+HOWEVER! If we look at the levels within the variables, we will see that the Oceania level still remains. Let's take a look.
+
+```{r}
+levels(gapminder$continent) # shows the levels of the continent variable -> Oceania is still there (as it should be)
+levels(gapNoOceania$continent) # shows the levels of the continent variable -> Oceania is still there even though it shouldn't be
+```
+
+So let's remove the unused factor levels. And double check our data to make sure we have 24 less rows in the gapNoOceania dataset. 
+
+```{r}
+gapminder %>% 
+  str() # Continent has 5 levels and 1704 observations
+
+gapNoOceania %>% 
+  droplevels() %>% 
+  str() # Continent has 4 levels and 1680 observations
+```
+
+Make a tibble with one row per year and columns for life expectancy for two or more countries -> this code creates a dataframe will all countries, the year, and the mean life expectancy for that year
+
+```{r}
+gapminder %>% 
+  group_by(country, year) %>% 
+  summarize(mlifeExp = mean(lifeExp)) # mean life expectancy
+```
+
+>B) Elaboration of the Gapminder Dataset - Reorder Levels
+
+Reorder the levels of country or continent. Use the forcats package to change the order of the factor levels, based on a principled summary of one of the quantitative variables. Consider experimenting with a summary statistic beyond the most basic choice of the median.
+
+So normally R just orders the levels alphabetically.
+
+```{r}
+levels(gapminder$country)
+levels(gapminder$continent)
+```
+
+But there are many ways we could organize the data. Let's start with the number of observations in each variable.
+
+```{r}
+cont <- gapminder$continent
+
+cont %>% 
+  fct_infreq() %>% 
+  levels() # This gives us the continent levels in descending order by count: "Africa"   "Asia"     "Europe"   "Americas" "Oceania" 
+
+cont %>% 
+  fct_infreq() %>% # instead of alphabetical order we now have descending order by count
+  qplot() # this will plot them
+
+summary(cont) # this gives you the accompanying counts
+```
+
+Let's change the order to reflect the life expectancy using forcats.
+
+```{r}
+
+gapminder %>%
+  mutate(continent = fct_reorder(continent, lifeExp)) %>% 
+  ggplot(aes(lifeExp, continent)) + geom_point()
+
+```
+
+
+##Part 2: File I/O
+
+Experiment with one or more of write_csv()/read_csv() (and/or TSV friends), saveRDS()/readRDS(), dput()/dget(). Create something new, probably by filtering or grouped-summarization of Singer or Gapminder. I highly recommend you fiddle with the factor levels, i.e. make them non-alphabetical (see previous section). Explore whether this survives the round trip of writing to file then reading back in.
+
+Let's start with changng the levels for the gapminder continent variable.
+
+
+```{r}
+gapNew <- gapminder %>% 
+          mutate(continent = fct_infreq(continent))
+
+levels(gapminder$continent)    
+levels(gapNew$continent)
+```
+
+
+Now let's write a .csv with the gapNew dataset.
+
+```{r}
+write.csv(gapNew, file = "gapNew.csv")
+```
+
+Now let's bring it back.
+
+```{r}
+gapNewNew <- read.csv("gapNew.csv")
+```
+
+Now let's see what the levels are for continent.
+
+```{r}
+levels(gapminder$continent)
+levels(gapNewNew$continent)
+levels(gapNew$continent)
+```
+
+
+Nope. The level change didn't survive. You have to change the levels everytime :(
+
+##Part 3: Visualization design
+
+Remake at least one figure or create a new one, in light of something you learned in the recent class meetings about visualization design and color. Maybe juxtapose your first attempt and what you obtained after some time spent working on it. Reflect on the differences. If using Gapminder, you can use the country or continent color scheme that ships with Gapminder. Consult the dimensions listed in All the Graph Things.
+
+Then, make a new graph by converting this visual (or another, if you’d like) to a plotly graph. What are some things that plotly makes possible, that are not possible with a regular ggplot2 graph?
+
+
+So one of the things that plotly does really well is 3d graphs. I don't think that ggplot does this very well. So let's explore the differences. Let's say we wanted to examine the relationship between population life expectancy and gdp percentage. In ggplot, we would have to make multiple scatterplots.
+
+```{r}
+LifeGDP <- ggplot(gapminder, aes(x=gdpPercap, y=lifeExp)) +
+  geom_point() +
+  xlab("GDP Per Cap") + 
+  ylab("Life Expectancy") + 
+  ggtitle("Life Expectancy and GDP")
+
+LifeGDP
+```
+
+```{r}
+ggplot(gapminder, aes(x=gdpPercap, y=pop)) +
+  geom_point() +
+  xlab("GDP Per Cap") + 
+  ylab("Population") + 
+  ggtitle("Population and GDP")
+```
+
+In plotly, we can plot these all into the same 3D plot.
+
+```{r}
+plot_ly(gapminder, 
+        x = ~gdpPercap, 
+        y = ~lifeExp, 
+        z = ~pop,
+        type = "scatter3d",
+        mode = "markers",
+        opacity = 0.2)
+```
+
+
+##Part 4: Visualization design
+
+Part 4: Writing figures to file
+
+Use ggsave() to explicitly save a plot to file. Then use ! [ Alt text ] ( /path /to /img. png) to load and embed it in your report. You can play around with various options, such as:
+
+Arguments of ggsave(), such as width, height, resolution or text scaling. Various graphics devices, e.g. a vector vs. raster format. Explicit provision of the plot object p via ggsave(..., plot = p). Show a situation in which this actually matters.
+
+```{r}
+ggsave("LifeGDPplot.png", LifeGDP,
+      width = 5, height = 4, dpi = 300, units = "in", device='png')
+```
+
+
+```{r}
+#![Alt text](/path/to/img.png)
+```
+
+
+
+
+
