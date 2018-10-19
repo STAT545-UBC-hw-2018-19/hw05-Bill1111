@@ -16,9 +16,9 @@ I had some difficulty with the ![Alt text](/path/to/img.png) piece, and I couldn
 
 ## Here are the links to the instructions and my homework files
 
-- https://github.com/STAT545-UBC-students/hw04-Bill1111/blob/master/STAT545_hmk4_WilliamHall.nb.html
-- https://github.com/STAT545-UBC-students/hw04-Bill1111/blob/master/STAT545_hmk4_WilliamHall.Rmd
-- https://github.com/STAT545-UBC-students/hw04-Bill1111/blob/master/STAT545_hmk4_WilliamHall.md
+- https://github.com/STAT545-UBC-students/hw05-Bill1111/blob/master/STAT545_hmk5_WilliamHall.Rmd
+- https://github.com/STAT545-UBC-students/hw04-Bill1111/blob/master/STAT545_hmk5_WilliamHall.Rmd
+- https://github.com/STAT545-UBC-students/hw04-Bill1111/blob/master/STAT545_hmk5_WilliamHall.md
 
 
 
